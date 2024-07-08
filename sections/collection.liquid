@@ -1,6 +1,6 @@
 {% paginate collection.products by 6 %}
   <section class="collection-sec">
-    <div>
+    <div class="left">
       <select id="sort-by">
         {% assign sort_by = collection.sort_by | default: collection.default_sort_by %}
 
@@ -17,7 +17,7 @@
       </select>
 
       <h1>
-        Products:
+        Categories: 
       </h1>
       
       <p>Body Care</p>
@@ -50,22 +50,23 @@
 {% endpaginate %}
 
 <style>
+  .left {
+    padding-left: 20px;
+  }
 
   #sort-by {
-      padding: 10px 20px 10px 20px;
-      background-color: black;
-      border: none;
-      color: white;
-      border-radius: 20px;
-      cursor: pointer;
+    padding: 10px 20px 10px 20px;
+    background-color: black;
+    border: none;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
   } 
   
   #sort-by:hover {
     background-color: white;
     color: black
   } 
-
-
 
   .collection-sec {
     background: {{ section.settings.background }};

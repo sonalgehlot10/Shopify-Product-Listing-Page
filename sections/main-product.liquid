@@ -12,7 +12,6 @@
       <h2>{{ product.title }}</h2>
       <p>{{ product.price | money }}</p>
       <p>{{ product.description }}</p>
-      {% comment %} <h3>Select Size</h3> {% endcomment %}
       {% form 'product', product %}
         <select name="id">
           {% for variant in product.variants %}
@@ -23,7 +22,6 @@
         </select>
       {% endform %}
       <button type="submit">Add to Cart</button>
-      {% comment %} <input type="submit" value="Add to cart"> {% endcomment %}
     </div>
   </div>
 </section>
