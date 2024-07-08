@@ -1,0 +1,145 @@
+{% paginate collection.products by 6 %}
+  <section class="collection-sec">
+    <div>
+      <select id="sort-by">
+        {% assign sort_by = collection.sort_by | default: collection.default_sort_by %}
+
+        {% for option in collection.sort_options %}
+          <option
+            value="{{ option.value }}"
+            {% if option.value == sort_by %}
+              selected="selected"
+            {% endif %}
+          >
+            {{ option.name }}
+          </option>
+        {% endfor %}
+      </select>
+
+      <h1>
+        Products:
+      </h1>
+      
+      <p>Body Care</p>
+      <p>Fragrance</p>
+      <p>Haircare</p>
+      <p>Makeup</p>
+      <p>Skincare</p>
+
+    </div>
+
+    <div>
+      <h1 style="font-size: 30px">{{ collection.title }}</h1>
+      <div class="products-grid">
+        {% for product in collection.products %}
+          <div class="product-card">
+            <img
+              width="300"
+              height="300"
+              loading="lazy"
+              src="{{ product.featured_image | image_url}}"
+            >
+            <h3>{{ product.title | link_to: product.url }}</h3>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  {{ paginate | default_pagination }}
+{% endpaginate %}
+
+<style>
+
+  #sort-by {
+      padding: 10px 20px 10px 20px;
+      background-color: black;
+      border: none;
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+  } 
+  
+  #sort-by:hover {
+    background-color: white;
+    color: black
+  } 
+
+
+
+  .collection-sec {
+    background: {{ section.settings.background }};
+    color: {{ section.settings.text_color }};
+    padding: 10px;
+    display: flex;
+    justify-content: space-between
+  }
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 20px; 
+  }
+
+  .product-card {
+    border: 1px solid #ddd; 
+    padding: 10px;
+    text-align: center;
+  }
+
+  .product-card img {
+    max-width: 100%;
+    height: auto;
+  }
+
+
+</style>
+
+<script>
+  Shopify.queryParams = {};
+
+  // Preserve existing query parameters
+  if (location.search.length) {
+    var params = location.search.substr(1).split('&');
+
+    for (var i = 0; i < params.length; i++) {
+      var keyValue = params[i].split('=');
+
+      if (keyValue.length) {
+        Shopify.queryParams[decodeURIComponent(keyValue[0])] = decodeURIComponent(keyValue[1]);
+      }
+    }
+  }
+
+  // Update sort_by query parameter on select change
+  document.querySelector('#sort-by').addEventListener('change', function (e) {
+    var value = e.target.value;
+
+    Shopify.queryParams.sort_by = value;
+    location.search = new URLSearchParams(Shopify.queryParams).toString();
+  });
+</script>
+
+{% schema %}
+{
+  "name": "collection",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "#F4F4F4"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#000000"
+    }
+  ],
+  "presets": [
+    {
+      "name": "collection"
+    }
+  ]
+}
+{% endschema %}
